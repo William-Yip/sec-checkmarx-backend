@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Security Leaks Example</title>
+    <style>
+        /* CSS Security Issue: Inline CSS with potentially dangerous content */
+        body {
+            background-image: url('javascript:alert("CSS Injection")');
+        }
+    </style>
+</head>
+<body>
+    <h1>Security Leaks Example</h1>
+    
+    <!-- Cross-Site Scripting (XSS) -->
+    <form action="" method="GET">
+        <label for="input">Enter something:</label>
+        <input type="text" id="input" name="input">
+        <button type="submit">Submit</button>
+    </form>
+    <div>
+        <h2>Output:</h2>
+        <p id="output">
+            <!-- Vulnerable to XSS -->
+            <script>
+                const params = new URLSearchParams(window.location.search);
+                const userInput = params.get('input');
+                if (userInput) {
+                    document.write(userInput);
+                }
+            </script>
+        </p>
+    </div>
+
+    <!-- JavaScript Security Issue: Inline JavaScript with unsafe handling of user input -->
+    <script>
+        const searchParams = new URLSearchParams(window.location.search);
+        const name = searchParams.get('name');
+        if (name) {
+            // This line is vulnerable to XSS if 'name' parameter contains malicious script
+            alert("Hello, " + name);
+        }
+    </script>
+</body>
+</html>
